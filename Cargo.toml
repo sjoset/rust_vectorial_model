@@ -1,0 +1,23 @@
+[[bin]]
+name = "rust_vect_oneshot"
+path = "src/main.rs"
+
+[[bin]]
+name = "total_fragments_vs_rh"
+path = "src/total_fragments_vs_rh.rs"
+
+[package]
+name = "rust_vect"
+version = "0.1.0"
+authors = ["S O"]
+edition = "2021"
+
+[dependencies]
+itertools-num = "0.1.3"
+serde = { version = "1.0.160", features=["derive"]}
+serde_yaml = "0.9.21"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
