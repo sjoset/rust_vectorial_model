@@ -123,8 +123,8 @@ fn write_results_fragment_sputter(
     )
     .unwrap();
 
-    for i in 0..coma.radial_grid.len() - 20 {
-        for j in 0..coma.angular_grid.len() - 20 {
+    for i in 0..coma.radial_grid.len() {
+        for j in 0..coma.angular_grid.len() {
             write!(
                 w,
                 "{:02.25e},\t{:02.25e},\t{:02.25e}\n",
