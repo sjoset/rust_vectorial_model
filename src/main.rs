@@ -58,7 +58,7 @@ fn write_results_config(w: &mut std::io::BufWriter<&std::fs::File>, vmc: &Vector
     .unwrap();
     write!(
         w,
-        "Q: {:02.5e} mol/s\tParent dissociative lifetime: {:02.5e} s\tParent total lifetime: {:02.5e} s\tParent outflow velocity {:02.5e} m/s\n",
+        "Q: {:02.5e} mol/s\tParent dissociative lifetime: {:02.5e} s\tParent total lifetime: {:02.5e} s\tParent outflow velocity: {:02.5e} m/s\n",
         vmc.base_q,
         vmc.p_tau_d,
         vmc.p_tau_t,
@@ -74,7 +74,7 @@ fn write_results_config(w: &mut std::io::BufWriter<&std::fs::File>, vmc: &Vector
         ).unwrap();
     write!(
         w,
-        "Parent destruction level: {:03.1}%\tFragment destruction level {:03.1}%\n\n",
+        "Parent destruction level: {:03.1}%\tFragment destruction level: {:03.1}%\n\n",
         vmc.parent_destruction_level * 100.0,
         vmc.fragment_destruction_level * 100.0,
     )
@@ -84,7 +84,7 @@ fn write_results_config(w: &mut std::io::BufWriter<&std::fs::File>, vmc: &Vector
 fn write_results_model_info(w: &mut std::io::BufWriter<&std::fs::File>, coma: &VectorialModel) {
     write!(
         w,
-        "Collision sphere radius: {:02.5e} km\ncoma radius: {:02.5e} km\nmax grid extent: {:02.5e} km\n\n",
+        "Collision sphere radius: {:02.5e} km\nComa radius: {:02.5e} km\nMax grid extent: {:02.5e} km\n\n",
         coma.collision_sphere_radius / 1000.0,
         coma.coma_radius / 1000.0,
         coma.max_grid_radius / 1000.0,
