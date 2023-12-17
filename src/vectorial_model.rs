@@ -53,7 +53,7 @@ pub fn construct_vectorial_model(vmc: &VectorialModelConfig) -> VectorialModel {
     let grid_max: f64 = coma_r + fragment_travel_dist;
 
     // if backflow_mode = false, we compute within the collision sphere for better results
-    let mut min_r: f64 = 1000.0;
+    let min_r: f64 = 1000.0;
     // if vmc.backflow_mode {
     //     min_r = 2.0 * csr
     // };
@@ -64,7 +64,7 @@ pub fn construct_vectorial_model(vmc: &VectorialModelConfig) -> VectorialModel {
     // bump the angles up to the midpoints of the prelim grid by adding half the difference of
     // adjacent elements
     // this pushes the angular grid away from the outflow axis at theta = 0
-    let ang_grid = ang_grid_prelim
+    let ang_grid: Vec<f64> = ang_grid_prelim
         .windows(2)
         .map(|x| x[0] + (x[1] - x[0]) / 2.0)
         .collect();
