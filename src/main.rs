@@ -119,7 +119,7 @@ fn write_results_fragment_sputter(
 ) {
     write!(
         w,
-        "r (meters),\t\t\ttheta (radians),\t\tfragment density (1/m^3)\n"
+        "r (kilometers),\t\t\ttheta (radians),\t\tfragment density (1/m^3)\n"
     )
     .unwrap();
 
