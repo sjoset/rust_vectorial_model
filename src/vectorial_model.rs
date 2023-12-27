@@ -45,7 +45,7 @@ pub fn construct_vectorial_model(vmc: &VectorialModelConfig) -> VectorialModel {
 
     // how far parent, fragments travel before destruction_level percent are destroyed
     let coma_r: f64 =
-        -1.0 * vmc.v_photo * vmc.p_tau_t * ((1.0 - vmc.parent_destruction_level).log2());
+        -1.0 * vmc.v_outflow * vmc.p_tau_t * ((1.0 - vmc.parent_destruction_level).log2());
     let fragment_beta_r: f64 = -1.0 * (1.0 - vmc.fragment_destruction_level).log2();
     let fragment_travel_dist: f64 = fragment_beta_r * vmc.f_tau_t * (vmc.v_outflow + vmc.v_photo);
 
