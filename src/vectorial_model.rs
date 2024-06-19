@@ -17,7 +17,7 @@ pub struct VectorialModelConfig {
 
     pub parent_destruction_level: f64,
     pub fragment_destruction_level: f64,
-    // pub backflow_mode: bool,
+    pub backflow_exclusion_radius: Option<f64>,
 }
 
 #[derive(Clone)]
@@ -40,14 +40,12 @@ pub struct VectorialModelResult {
 }
 
 pub fn construct_vectorial_model(vmc: &VectorialModelConfig) -> VectorialModel {
-    // collision sphere
+    // collision sphere radius
     let csr: f64 = (vmc.sigma * vmc.base_q) / (4.0 * vmc.v_outflow);
 
     // how far parent, fragments travel before destruction_level percent are destroyed
     let parent_beta_r: f64 = -1.0 * (1.0 - vmc.parent_destruction_level).ln();
     let coma_r: f64 = parent_beta_r * vmc.v_outflow * vmc.p_tau_t;
-    // let coma_r: f64 =
-    //     -1.0 * vmc.v_outflow * vmc.p_tau_t * ((1.0 - vmc.parent_destruction_level).log2());
     let fragment_beta_r: f64 = -1.0 * (1.0 - vmc.fragment_destruction_level).ln();
     let fragment_travel_dist: f64 = fragment_beta_r * vmc.f_tau_t * (vmc.v_outflow + vmc.v_photo);
 
@@ -146,6 +144,7 @@ pub fn fragment_sputter_at_point(
         vmc.radial_substeps,
         coma.max_grid_radius,
         coma.epsilon_max,
+        vmc.backflow_exclusion_radius.unwrap()
     );
 
     let outflow_samples = outflow_axis_points.iter().zip(drs.iter());
@@ -190,17 +189,23 @@ pub fn outflow_axis_sample(
     radial_substeps: usize,
     max_grid_radius: f64,
     epsilon_max: f64,
+    backflow_exclusion_radius: f64,
 ) -> (Vec<f64>, Vec<f64>) {
     let grid_edge_angle: f64 = x.atan2(y - max_grid_radius);
-    let max_subangle: f64;
-    if grid_edge_angle < epsilon_max {
-        max_subangle = grid_edge_angle;
-    } else {
-        max_subangle = epsilon_max;
-    }
+
+    // the ejection sites can send a fragment out at (at most) epsilon_max, but tracing that angle
+    // to the outflow axis might take us beyond the edge of our outflow axis, so choose the minimum
+    // of these two
+    let max_subangle: f64 = f64::min(grid_edge_angle, epsilon_max);
+
+    // the ejection must happen at an angle of at least theta: shallower angles will not hit the point x, y
+    // but if we want to exclude ejection sites within a certain radius, we have to limit the
+    // subangles by taking starting angles at a larger value if theta would include ejection sites
+    let grid_min_angle: f64 = x.atan2(y - backflow_exclusion_radius);
+    let min_subangle: f64 = f64::max(grid_min_angle, theta);
 
     // divide the space into (radial_substeps + 1) slices and take the midpoints
-    let subangles: Vec<f64> = linspace::<f64>(theta, max_subangle, radial_substeps + 1).collect();
+    let subangles: Vec<f64> = linspace::<f64>(min_subangle, max_subangle, radial_substeps + 1).collect();
     let ejection_grid: Vec<f64> = subangles.iter().map(|t| (y - (x / t.tan()))).collect();
     let ejection_sites: Vec<f64> = ejection_grid
         .windows(2)
@@ -214,8 +219,11 @@ pub fn outflow_axis_sample(
 
 pub fn vectorial_model_config_from_yaml(yaml_filename: std::path::PathBuf) -> VectorialModelConfig {
     let f = std::fs::File::open(yaml_filename).expect("Could not read yaml config file!");
-    let vmc: VectorialModelConfig =
-        serde_yaml::from_reader(f).expect("Format error in yaml config file!");
+    let mut vmc: VectorialModelConfig = serde_yaml::from_reader(f).expect("Format error in yaml config file!");
+
+    // we treat this as an Option, so if none is provided, set it to r = 0 to include the entire
+    // outflow axis by default
+    vmc.backflow_exclusion_radius.get_or_insert(f64::from(0.0));
     vmc
 }
 
