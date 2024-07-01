@@ -7,9 +7,9 @@ name = "total_fragments_vs_rh"
 path = "src/total_fragments_vs_rh.rs"
 
 [package]
-name = "rust_vect"
+name = "rust_vectorial_model"
 version = "0.1.0"
-authors = ["S O"]
+authors = ["Shawn Oset"]
 edition = "2021"
 
 [dependencies]
