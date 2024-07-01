@@ -266,3 +266,44 @@ pub fn logspace(power_start: f64, power_end: f64, num: usize) -> Vec<f64> {
 pub fn geomspace(value_start: f64, value_end: f64, num: usize) -> Vec<f64> {
     logspace(value_start.log10(), value_end.log10(), num)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_logspace_startpoint() {
+        let logspace_points = logspace(1.0, 8.0, 8);
+        assert!(logspace_points.first() == Some(&10.0_f64));
+    }
+
+    #[test]
+    fn test_logspace_endpoint() {
+        let logspace_points = logspace(1.0, 8.0, 8);
+        assert!(logspace_points.last() == Some(&100000000.0_f64));
+    }
+
+    #[test]
+    fn test_logspace_length() {
+        let logspace_points = logspace(1.0, 8.0, 8);
+        assert!(logspace_points.len() == 8);
+    }
+
+    #[test]
+    fn test_geomspace_startpoint() {
+        let geomspace_points = geomspace(10.0, 100000000.0_f64, 8);
+        assert!(geomspace_points.first() == Some(&10.0_f64));
+    }
+
+    #[test]
+    fn test_geomspace_endpoint() {
+        let geomspace_points = geomspace(10.0, 100000000.0_f64, 8);
+        assert!(geomspace_points.last() == Some(&100000000.0_f64));
+    }
+
+    #[test]
+    fn test_geomspace_length() {
+        let geomspace_points = geomspace(10.0, 100000000.0_f64, 8);
+        assert!(geomspace_points.len() == 8);
+    }
+}
