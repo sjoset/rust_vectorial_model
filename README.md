@@ -5,10 +5,10 @@ With nix flakes enabled, use ```nix develop``` to enter development shell
 Use ```cargo test``` to run available code tests
 
 ## Building
-cargo build --release
+```cargo build --release```
 
 ## Running
-cargo run --release --bin [rust_vect_oneshot, total_fragments_vs_rh] [program arguments]
+```cargo run --release --bin [rust_vect_oneshot, total_fragments_vs_rh] [program arguments]```
 
 or run the binaries available after building in target/release
 
@@ -20,7 +20,7 @@ The main vectorial model binary.
 Takes two command line arguments:
 #### Input config file
 a yaml file containing the model configuration
-An example configuration yaml file is provided in `example_input/parameters_example.yaml`.
+An example configuration yaml file is provided in ```example_input/parameters_example.yaml```.
 #### Output file
 the filename to use for model output.
 
@@ -30,7 +30,7 @@ Binary for running a given model configuration over a range of heliocentric dist
 ### Command line
 #### Input config file
 a yaml file containing the model configuration
-An example configuration yaml file is provided in `example_input/parameters_example.yaml`.
+An example configuration yaml file is provided in ```example_input/parameters_example.yaml```.
 #### Output file
 the filename to use for model output.
 #### rh_start
@@ -43,9 +43,8 @@ How many heliocentric distances to run along this range
 ### Output
 The output is a file with format of
 
-r_helio  total_fragments
--------  ---------------
-1.0      1.0e30
-1.1      1.1e30
-...
-etc.
+| r_helio | total_fragments |
+|-------  | --------------- |
+|1.0      | 1.0e30          |
+|1.1      | 1.1e30          |
+|etc.     |                 |
