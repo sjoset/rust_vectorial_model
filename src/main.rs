@@ -52,8 +52,8 @@ fn write_results(
 fn write_results_config(w: &mut std::io::BufWriter<&std::fs::File>, vmc: &VectorialModelConfig) {
     write!(
         w,
-        "Radial grid size: {}\tAngular grid size: {}\tRadial substeps: {}\n\n",
-        vmc.radial_points, vmc.angular_points, vmc.radial_substeps,
+        "Radial grid size: {}\tAngular grid size: {}\tRadial substeps: {}\tBackflow exclusion radius: {} m\n\n",
+        vmc.radial_points, vmc.angular_points, vmc.radial_substeps, vmc.backflow_exclusion_radius.unwrap()
     )
     .unwrap();
     write!(
